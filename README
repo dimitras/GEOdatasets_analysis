@@ -1,0 +1,8 @@
+GEO analysis
+
+Retrieve GEO datasets to check the variability of expression of a key genes list for the COX pathway.
+
+An R source commands-set for parsing GSE_family.soft files and creating a custom csv table with a 'GSM-expression value' pair per prob. 
+Used the GEOquery lib written in R (http://www2.warwick.ac.uk/fac/sci/moac/people/students/peter_cock/r/geo). 
+
+Embodied script to run R source by command line (without having to get in the R environment) by passing through arguments.
