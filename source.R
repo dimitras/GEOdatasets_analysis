@@ -1,7 +1,7 @@
-# R --vanilla --args --identifier GSE1485 --ofile results/GSE1485.csv < source.R
-# R --vanilla --args --identifier GSE2552 --ofile results/GSE2552.csv < source.R
-# R --vanilla --args --identifier GSE5859 --ofile results/GSE5859.csv < source.R
-# R --vanilla --args --identifier GSE10824 --ofile results/GSE10824.csv < source.R
+# R --vanilla --args --identifier GSE1485 --ofile results/GSE1485.csv --genesfile results/gene_lists/GSE1485_genes.csv < source.R
+# R --vanilla --args --identifier GSE2552 --ofile results/GSE2552.csv --genesfile results/gene_lists/GSE2552_genes.csv < source.R
+# R --vanilla --args --identifier GSE5859 --ofile results/GSE5859.csv --genesfile results/gene_lists/GSE5859_genes.csv < source.R
+# R --vanilla --args --identifier GSE10824 --ofile results/GSE10824.csv --genesfile results/gene_lists/GSE10824_genes.csv < source.R
 library(Biobase)
 library(GEOquery)
 
@@ -10,12 +10,14 @@ if(require("getopt", quietly=TRUE)) {
 	opt <- getopt(matrix(c(
 		'ifile', 'i', 1, "character", "input table file",
 		'identifier', 'a', 1, "character", "identifier for file",
-		'ofile', 'o', 1, "character", "output table file"
+		'ofile', 'o', 1, "character", "output table file",
+		'genesfile', 'g', 1, "character", "output genes file"
 	), ncol=5, byrow=TRUE))
 	if(!is.null(opt$ifile) | !is.null(opt$identifier)) {
 		ifile <- opt$ifile
 		identifier <- opt$identifier
 		ofile <- opt$ofile
+		genesfile <- opt$genesfile
 	} else
 		q()
 }
@@ -69,7 +71,26 @@ colnames(new_table) = new_table.colnames
 
 
 # create file
-write.table(cbind('','','','','','', sample.matrix), file=ofile, sep = ",", row.names = FALSE, col.names = FALSE)
-write.table(new_table, file=ofile, sep = ",", row.names = FALSE, append = TRUE)
+# write.table(cbind('','','','','','', sample.matrix), file=ofile, sep = ",", row.names = FALSE, col.names = FALSE)
+# write.table(new_table, file=ofile, sep = ",", row.names = FALSE, append = TRUE)
 
+
+# create genes list
+new_table_genes = c(as.character(annotation_table$'Gene Symbol'))
+g = table(new_table_genes)
+# g[names(g)==as.character('STAT1')] # count STAT1
+write.table(g, file=genesfile, sep = ",", row.names = FALSE, col.names = FALSE)
+
+q()
+
+# read the genes COX pathway
+geneids_file = "data/COX_pathway_genesids.csv"
+cox_pathway_genes <- read.table(geneids_file, header=F, sep=”,”, quote="\"")
+
+
+# find cox_pathway genes in gsms
+for(i in as.single(1:nrow(cox_pathway_genes))) {
+        grep(i,names(g),ignore.case=TRUE,value=TRUE)
+# 	match(i, g)
+}
 
