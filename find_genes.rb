@@ -1,44 +1,52 @@
-# locate cox pathway genes existance in GEO datasets & count their existance
-# USAGE: ruby find_genes.rb data/COX_pathway_genesids.csv
+#!/usr/bin/ruby
+
+# locate cox pathway genes existence in GEO datasets & count their existence
+# USAGE: for i in results/*.csv;do (echo $i;./find_genes.rb data/COX_pathway_genesids.csv $i);done
 
 require 'rubygems'
 require 'fastercsv'
 
 cox_pathway_genes_file = ARGV[0]
+infile = ARGV[1]
 
-Dir["results/*.csv"].each do |infile|
-	filename = infile.split("/")[1].split(".")[0]
-	puts filename
-	gene_names = {}
-	genes = []
-	full_entries = Hash.new { |h,k| h[k] = [] }
-	found_genes = Array.new
-	FasterCSV.foreach(infile) do |row|
-		# count dataset genes
-		row[1].each do |gene|
-			genes = gene.split(" /// ")
-			genes.each do |g|
-				if !gene_names.has_key?(g)
-					gene_names[g.to_s] = 1
-				elsif gene_names.has_key?(g)
-					gene_names[g.to_s] += 1
+filename = infile.split("/")[1].split(".")[0]
+found_genes_output_file = "results/found_genes/#{filename}_found_genes.csv"
+
+# read cox pathway genes
+cox_genes = {}
+FasterCSV.foreach(cox_pathway_genes_file) do |gene|
+	cox_genes[gene.to_s] = nil
+end
+
+# find COX genes through the probes and count them
+gene_expressions = Hash.new { |h,k| h[k] = [] }
+genes_appearance = {}
+FasterCSV.foreach(infile) do |row|
+	row[1].each do |gene|
+		gene_symbols = gene.split(" /// ")
+		gene_symbols.each do |gene_symbol|
+			if cox_genes.has_key?(gene_symbol)
+				gene_expressions[gene_symbol.to_s + "|" + row[0]] << row
+				# count COX genes appearance through the probes
+				if !genes_appearance.has_key?(gene_symbol)
+					genes_appearance[gene_symbol.to_s] = 1
+				elsif genes_appearance.has_key?(gene_symbol)
+					genes_appearance[gene_symbol.to_s] += 1
 				end
-				full_entries[g.to_s] << row
 			end
 		end
 	end
-
-	# search for cox pathway genes
-	found_genes_output = File.open("results/found_genes/#{filename}_found_genes.csv", "w")
-	FasterCSV.foreach(cox_pathway_genes_file) do |gene|
-		if gene_names.has_key?(gene.to_s)
-			found_genes << [gene.to_s, gene_names[gene.to_s]]
-			found_genes_output.puts '"' + full_entries[gene.to_s].join(",") + '"'
-		end
-	end
-	found_genes_output.close
-
 end
+
+# print cox genes expressions
+found_genes_output = File.open(found_genes_output_file, "w")
+gene_expressions.sort.each do |g|
+	gene_symbol = g[0].split("|")[0].to_s
+	found_genes_output.puts gene_symbol + "," + g[1].join(",")
+end
+found_genes_output.close
+
+
 
 
 

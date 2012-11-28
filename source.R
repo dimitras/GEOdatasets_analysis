@@ -71,26 +71,14 @@ colnames(new_table) = new_table.colnames
 
 
 # create file
-# write.table(cbind('','','','','','', sample.matrix), file=ofile, sep = ",", row.names = FALSE, col.names = FALSE)
-# write.table(new_table, file=ofile, sep = ",", row.names = FALSE, append = TRUE)
+write.table(cbind('','','','','','', sample.matrix), file=ofile, sep = ",", row.names = FALSE, col.names = FALSE)
+write.table(new_table, file=ofile, sep = ",", row.names = FALSE, append = TRUE)
 
 
-# create genes list
+# create genes list (NOT USED)
 new_table_genes = c(as.character(annotation_table$'Gene Symbol'))
 g = table(new_table_genes)
 # g[names(g)==as.character('STAT1')] # count STAT1
 write.table(g, file=genesfile, sep = ",", row.names = FALSE, col.names = FALSE)
 
-q()
-
-# read the genes COX pathway
-geneids_file = "data/COX_pathway_genesids.csv"
-cox_pathway_genes <- read.table(geneids_file, header=F, sep=”,”, quote="\"")
-
-
-# find cox_pathway genes in gsms
-for(i in as.single(1:nrow(cox_pathway_genes))) {
-        grep(i,names(g),ignore.case=TRUE,value=TRUE)
-# 	match(i, g)
-}
 

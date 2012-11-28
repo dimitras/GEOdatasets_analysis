@@ -17,3 +17,4 @@ Find the COX pathway genes through the datasets.
 
 - Parse GSM tables with ruby script to find and count the existence of COX pathway genes. 
 - Export these genes with their expression values for all samples.
+- Barplot in R, the average expression and standard error per gene.
