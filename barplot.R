@@ -1,7 +1,7 @@
-# R --vanilla --args --ifile results/found_genes/GSE10824_found_genes.csv --identifier GSE10824 --ofile results/found_genes/GSE10824.pdf < barplot.R
-# R --vanilla --args --ifile results/found_genes/GSE1485_found_genes.csv --identifier GSE1485 --ofile results/found_genes/GSE1485.pdf < barplot.R
-# R --vanilla --args --ifile results/found_genes/GSE2552_found_genes.csv --identifier GSE2552 --ofile results/found_genes/GSE2552.pdf < barplot.R
-# R --vanilla --args --ifile results/found_genes/GSE5859_found_genes.csv --identifier GSE5859 --ofile results/found_genes/GSE5859.pdf < barplot.R
+# R --vanilla --args --ifile results/found_genes/GSE10824_found_genes.csv --gse_id GSE10824 --avgplot_out results/found_genes/GSE10824_avgplot.pdf --varplot_out results/found_genes/GSE10824_varplot.pdf --sdplot_out results/found_genes/GSE10824_sdplot.pdf < barplot.R
+# R --vanilla --args --ifile results/found_genes/GSE1485_found_genes.csv --gse_id GSE1485 --avgplot_out results/found_genes/GSE1485_avgplot.pdf --varplot_out results/found_genes/GSE1485_varplot.pdf --sdplot_out results/found_genes/GSE1485_sdplot.pdf < barplot.R
+# R --vanilla --args --ifile results/found_genes/GSE2552_found_genes.csv --gse_id GSE2552 --avgplot_out results/found_genes/GSE2552_avgplot.pdf --varplot_out results/found_genes/GSE2552_varplot.pdf --sdplot_out results/found_genes/GSE2552_sdplot.pdf < barplot.R
+# R --vanilla --args --ifile results/found_genes/GSE5859_found_genes.csv --gse_id GSE5859 --avgplot_out results/found_genes/GSE5859_avgplot.pdf --varplot_out results/found_genes/GSE5859_varplot.pdf --sdplot_out results/found_genes/GSE5859_sdplot.pdf < barplot.R
 
 library(plotrix)
 library(RColorBrewer)
@@ -10,13 +10,17 @@ library(RColorBrewer)
 if(require("getopt", quietly=TRUE)) {
 	opt <- getopt(matrix(c(
 		'ifile', 'i', 1, "character", "input table file",
-		'identifier', 'a', 1, "character", "identifier for file",
-		'ofile', 'o', 1, "character", "output table file"
+		'gse_id', 'g', 1, "character", "identifier for file",
+		'avgplot_out', 'a', 1, "character", "output AVG plot file",
+		'varplot_out', 'v', 1, "character", "output VARIANCE plot file",
+		'sdplot_out', 's', 1, "character", "output STANDARD DEVIATION plot file"
 	), ncol=5, byrow=TRUE))
-	if(!is.null(opt$ifile) | !is.null(opt$identifier)) {
+	if(!is.null(opt$ifile) | !is.null(opt$gse_id)) {
 		ifile <- opt$ifile
-		identifier <- opt$identifier
-		ofile <- opt$ofile
+		gse_id <- opt$gse_id
+		avgplot_out <- opt$avgplot_out
+		varplot_out <- opt$varplot_out
+		sdplot_out <- opt$sdplot_out
 	} else
 		q()
 }
@@ -29,15 +33,28 @@ found_gene_expressions <- read.table(ifile, header=F, sep=",")
 ncol <- max(count.fields(ifile, sep = ","))
 
 # function to calculate the standard error
-AVG.plot <- function(mean, stderr, names) {
-    AVG.H <- mean+stderr # Calculate upper AVG
-    AVG.L <- mean-stderr # Calculate lower AVG
-    xvals <- barplot(mean, names.arg=names, las=2, col=mypalette[8], main=paste("COX pathway genes in",identifier), ylab="Average expression") # Plot bars
-    arrows(xvals, mean, xvals, AVG.H, length = 0.05, angle=90) # Draw error bars
-    arrows(xvals, mean, xvals, AVG.L, length = 0.05, angle=90)
+bar.plot <- function(value, stderr, names, ylabel) { # value can be average, or variance, or standard deviation and so on
+    bar.H <- value+stderr # Calculate upper value
+    bar.L <- value-stderr # Calculate lower value
+    xvals <- barplot(value, names.arg=names, las=2, col=mypalette[8], main=paste("COX pathway genes in",gse_id), ylab=ylabel) # Plot bars
+    arrows(xvals, value, xvals, bar.H, length = 0.05, angle=90) # Draw error bars
+    arrows(xvals, value, xvals, bar.L, length = 0.05, angle=90)
 }
 
 # make the barplot for average expression and standard error
-pdf(ofile)
-AVG.plot(rowMeans(found_gene_expressions[,8:ncol]), apply(found_gene_expressions[,8:ncol],1,std.error), found_gene_expressions$V1)
+pdf(avgplot_out)
+bar.plot(rowMeans(found_gene_expressions[,8:ncol]), apply(found_gene_expressions[,8:ncol],1,std.error), found_gene_expressions$V1, "Average expression")
 dev.off()
+
+# make the barplot for variance expression and standard error
+pdf(varplot_out)
+barplot(apply(found_gene_expressions[,8:ncol],1,var),names.arg=found_gene_expressions$V1,las=2, col=mypalette[8], main=paste("COX pathway genes in",gse_id), ylab="Variance expression")
+# bar.plot(apply(found_gene_expressions[,8:ncol],1,var), apply(found_gene_expressions[,8:ncol],1,std.error), found_gene_expressions$V1, "Variance expression")
+dev.off()
+
+# make the barplot for standard deviation expression and standard deviation error
+pdf(sdplot_out)
+bar.plot(apply(found_gene_expressions[,8:ncol],1,sd), apply(found_gene_expressions[,8:ncol],1,std.error), found_gene_expressions$V1, "Standard deviation expression")
+dev.off()
+
+
