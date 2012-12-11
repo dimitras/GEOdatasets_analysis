@@ -26,7 +26,7 @@ if(require("getopt", quietly=TRUE)) {
 if(!is.null(ifile)) {
 	gse <- getGEO(filename=ifile)
 } else if (!is.null(identifier)) {
-	gse <- getGEO(identifier,GSEMatrix=FALSE, destdir="data/downloads")
+	gse <- getGEO(identifier,GSEMatrix=FALSE, destdir="data/raw/GEO_raw/downloads")
 } else
 	q()
 
