@@ -1,4 +1,5 @@
-# USAGE: R --vanilla --args --coxf data/COX_pathway_genes.csv --pclf results/PCLs/GSE1485.csv --identifier GSE1485 --ofile results/found_genes_in_PCLs/GSE1485_found_in_PCL.csv < find_coxgenes_in_pcl.R
+# USAGE: 
+# R --vanilla --args --coxf data/COX_pathway_genes.csv --pclf results/PCLs/GSE1485.csv --identifier GSE1485 --ofile results/found_genes_in_PCLs/GSE1485_found_in_PCL.csv < find_coxgenes_in_pcl.R
 # R --vanilla --args --coxf data/COX_pathway_genes.csv --pclf results/PCLs/GSE2552.csv --identifier GSE2552 --ofile results/found_genes_in_PCLs/GSE2552_found_in_PCL.csv < find_coxgenes_in_pcl.R
 # R --vanilla --args --coxf data/COX_pathway_genes.csv --pclf results/PCLs/GSE5859.csv --identifier GSE5859 --ofile results/found_genes_in_PCLs/GSE5859_found_in_PCL.csv < find_coxgenes_in_pcl.R
 # R --vanilla --args --coxf data/COX_pathway_genes.csv --pclf results/PCLs/GSE10824.csv --identifier GSE10824 --ofile results/found_genes_in_PCLs/GSE10824_found_in_PCL.csv < find_coxgenes_in_pcl.R

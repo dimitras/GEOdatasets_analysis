@@ -37,6 +37,7 @@ cox_genes_ids_with_suffix = paste(cox_genes_ids, "_at", sep="")
 cox_genes_ids_with_suffix
 
 # subset from the cox_entrez_ids found in the experiments
+# ---- NOT FUNCTIONAL YET !!! -----
 mean_expression_list <- lapply(cox_genes_ids_with_suffix, function(gene_id) {
 	lapply(experiments,function(experiment_table, gene_id) {
 		rowMeans(subset(experiment_table, experiment_table$X == gene_id)[,2:length(colnames(experiment_table))])
