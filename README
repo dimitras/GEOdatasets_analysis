@@ -6,7 +6,12 @@ All experiments retrieved from GEO were carried out under the same conditions. T
 
 Retrieve GEO datasets to check the variability of expression of a key genes list for the COX pathway.
 
-- An R source commands-set for parsing GSE_family.soft files and creating a custom csv table with a 'GSM-expression value' pair per prob. 
+- Links for studies in GEO:
+http://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=GDS2106
+http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1485
+http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE5859
+http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10824
+- An R source commands-set for parsing GSE_family.soft files and creating a custom csv table with a 'GSM-expression values' set per probe. 
 - Used the GEOquery lib written in R (http://www2.warwick.ac.uk/fac/sci/moac/people/students/peter_cock/r/geo). 
 - Embodied script to run R source by command line (without having to get in the R environment) by passing through arguments.
 
@@ -22,14 +27,16 @@ Find the COX pathway genes through the datasets (GSE as source files).
 
 ### PART 3 ###
 
-Retrieve CEL files for GEO datasets from GEO to process and RMA normalize the Affy CEL files.
+Retrieve the respective CEL files for GEO datasets from GEO to process and RMA normalize the Affy CEL files.
 
 - Run Princeton's script for all experiments and get the PCL files in format: Entrezid_at, expression values for all samples.
+(https://bitbucket.org/FunctionLab/arrayprocess/src/7ac17f671ac91381527ad97de377a7c0c4be6a9a/ProcessToPCL.R?at=default)
+- Use the hgfocus chip lib from brain: http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/16.0.0/entrezg.asp
 
 
 ### PART 4 ###
 
-Find the COX pathway genes through the PCLs (same datasets but CEL as source files as mentioned in step 3).
+Find the COX pathway genes through the datasets, in PCLs (same datasets but using CEL files as source, as mentioned in step 3).
 
 - The probe-ids-like in the PCLs are the entrez ids with the probe_id suffix "at".
 - R script to locate the COX genes among the csv datasets (PCL files converted to csv first).
@@ -38,15 +45,24 @@ Find the COX pathway genes through the PCLs (same datasets but CEL as source fil
 
 ### PART 5 ###
 
-Retrieve genetic data from hapmap by correil id.
+Check if the GSM ids (samples) are the same through the experiments (used the GSM tables created in step 2)
 
-- Link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids) with ruby script.
-- Retrieve the respective genotypes for these coriell ids from hapmap. Parse all chromosomes in the consensus for each sample set (CEU, JPT, YRI, CHB) and also cross validate with the inconsistencies.
-- filter the genetic data with 1) 5% variance, 2) only parents
-- specify in genome 100KB +- from  transcription start site (not sure what this is yet..)
+- R script to get the uniques through the experiments, export a table with all the relations (https://upenn.box.com/s/zormz8yo5tgbkftru4aj)
 
 
 ### PART 6 ###
+
+Retrieve genetic data from hapmap by correil id.
+
+- Link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids) with ruby script.
+- Samples: ftp://ftp.ncbi.nlm.nih.gov/hapmap/samples_individuals/
+- Genotypes: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/
+- Retrieve the respective genotypes for these coriell ids from hapmap. Use plink format (http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/hapmap3_r3/plink_format/) to search within. In case of using hapmap format, parse all chromosomes in the consensus for each sample set (CEU, JPT, YRI, CHB) and also cross validate with the inconsistencies.
+- filter the genetic data with 1) 5% variance, 2) only parents.
+- specify in genome 100KB +- from  transcription start site (not sure what this is yet).
+
+
+### PART 7 ###
 
 Genetics analysis for COX expression.
 
