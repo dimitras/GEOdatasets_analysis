@@ -1,6 +1,7 @@
 COX expression analysis
 
-All experiments retrieved from GEO were carried out under the same conditions. The conditions would include how the samples were treated as well as the platform and protocol used to perform the microarray.
+All experiments retrieved from GEO were carried out under the same conditions. All microarrays performed on LCLs using an Affymetrix Human HG-Focus Target Array. Samples were treated the same, the platform and protocol used to perform the microarray was the same.
+
 
 ### PART 1 ###
 
@@ -22,7 +23,7 @@ Find the COX pathway genes through the datasets (GSE as source files).
 
 - Parse GSM tables with ruby script to find and count the existence of COX pathway genes. 
 - Export these genes with their expression values for all samples.
-- Barplot in R, the average expression and standard error per experiment and by gene (pending).
+- Barplot in R, the average, variance, and standard deviation in gene expression level for COX pathway genes, per experiment and by gene (pending).
 
 
 ### PART 3 ###
@@ -40,7 +41,7 @@ Find the COX pathway genes through the datasets, in PCLs (same datasets but usin
 
 - The probe-ids-like in the PCLs are the entrez ids with the probe_id suffix "at".
 - R script to locate the COX genes among the csv datasets (PCL files converted to csv first).
-- Barplot in R, the average expression and standard error per experiment and by gene (pending). Note that the x axis in the plots are the genes (entrez ids).
+- Barplot in R, the average, variance, and standard deviation in gene expression level for COX pathway genes, per experiment and by gene (pending). Note that the x axis in the plots are the genes (entrez ids).
 
 
 ### PART 5 ###
@@ -52,11 +53,11 @@ Check if the GSM ids (samples) are the same through the experiments (used the GS
 
 ### PART 6 ###
 
-Retrieve genetic data from hapmap by correil id.
+Retrieve genetic data from hapmap by correil id. 
 
-- Link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids) with ruby script.
+- Linking GEO expression data with genotypes from HapMap. Ruby script to link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids).
 - Samples: ftp://ftp.ncbi.nlm.nih.gov/hapmap/samples_individuals/
-- Genotypes: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/
+- Genotypes: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/2010-08_phaseII+III/forward/
 - Retrieve the respective genotypes for these coriell ids from hapmap. Use plink format (http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/hapmap3_r3/plink_format/) to search within. In case of using hapmap format, parse all chromosomes in the consensus for each sample set (CEU, JPT, YRI, CHB) and also cross validate with the inconsistencies.
 - filter the genetic data with 1) 5% variance, 2) only parents.
 - specify in genome 100KB +- from  transcription start site (not sure what this is yet).
@@ -64,7 +65,7 @@ Retrieve genetic data from hapmap by correil id.
 
 ### PART 7 ###
 
-Genetics analysis for COX expression.
+Association analysis to identify genetic variants that influence COX pathway gene expression.
 
 - Analysis with Genetic Power Calculator.
 - Whole genome association analysis plink toolset.
