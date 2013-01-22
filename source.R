@@ -2,6 +2,9 @@
 # R --vanilla --args --identifier GSE2552 --ofile results/GSE2552.csv --genesfile results/gene_lists/GSE2552_genes.csv < source.R
 # R --vanilla --args --identifier GSE5859 --ofile results/GSE5859.csv --genesfile results/gene_lists/GSE5859_genes.csv < source.R
 # R --vanilla --args --identifier GSE10824 --ofile results/GSE10824.csv --genesfile results/gene_lists/GSE10824_genes.csv < source.R
+
+# Retrieve GEO datasets, create file lists with GSM samples and gene ids per probe.
+
 library(Biobase)
 library(GEOquery)
 

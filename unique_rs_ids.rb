@@ -54,7 +54,7 @@ end
 # io files
 # data_path = "data/raw/Hapmap/test_data/"
 data_path = "data/raw/Hapmap/hapmap_genotypes_2010-08_phaseII+III_forward/"
-results_path = "results/Hapmap/hapmap_genotypes_2010-08_phaseII+III_forward/"
+results_path = "results/Hapmap/hapmap_genotypes_2010-08_phaseII+III_forward_with_merged_duplicates/"
 
 # find interesting files
 input_file_list = []
@@ -116,9 +116,3 @@ input_file_list.each do |input_pathname|
 		end
 	end
 end
-
-
-
-
-
-

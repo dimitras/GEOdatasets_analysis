@@ -3,6 +3,8 @@
 # R --vanilla --args --ifile results/found_genes/GSE2552_found_genes.csv --gse_id GSE2552 --avgplot_out results/found_genes/GSE2552_avgplot.pdf --varplot_out results/found_genes/GSE2552_varplot.pdf --sdplot_out results/found_genes/GSE2552_sdplot.pdf < barplot.R
 # R --vanilla --args --ifile results/found_genes/GSE5859_found_genes.csv --gse_id GSE5859 --avgplot_out results/found_genes/GSE5859_avgplot.pdf --varplot_out results/found_genes/GSE5859_varplot.pdf --sdplot_out results/found_genes/GSE5859_sdplot.pdf < barplot.R
 
+# Barplot the average, variance, and standard deviation in gene expression level for COX pathway genes
+
 library(plotrix)
 library(RColorBrewer)
 

@@ -3,6 +3,8 @@
 # R --vanilla --args --ifile results/found_genes_in_PCLs/GSE2552_found_in_PCL.csv --gse_id GSE2552 --avgplot_out results/found_genes_in_PCLs/plots/GSE2552_avgplot.pdf --varplot_out results/found_genes_in_PCLs/plots/GSE2552_varplot.pdf --sdplot_out results/found_genes_in_PCLs/plots/GSE2552_sdplot.pdf < pcl_plots.R
 # R --vanilla --args --ifile results/found_genes_in_PCLs/GSE5859_found_in_PCL.csv --gse_id GSE5859 --avgplot_out results/found_genes_in_PCLs/plots/GSE5859_avgplot.pdf --varplot_out results/found_genes_in_PCLs/plots/GSE5859_varplot.pdf --sdplot_out results/found_genes_in_PCLs/plots/GSE5859_sdplot.pdf < pcl_plots.R
 
+# Barplot the average, variance, and standard deviation in gene expression level for COX pathway genes, per experiment. Note that the x axis in the plots are the genes (entrez ids).
+
 library(plotrix)
 library(RColorBrewer)
 

@@ -12,60 +12,71 @@ http://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=GDS2106
 http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1485
 http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE5859
 http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10824
-- An R source commands-set for parsing GSE_family.soft files and creating a custom csv table with a 'GSM-expression values' set per probe. 
-- Used the GEOquery lib written in R (http://www2.warwick.ac.uk/fac/sci/moac/people/students/peter_cock/r/geo). 
-- Embodied script to run R source by command line (without having to get in the R environment) by passing through arguments.
+
+- GSM lists (source.R): Parse GSE_family.soft files and creating a custom csv table with a 'GSM-expression values' set per probe. Used the GEOquery lib written in R (http://www2.warwick.ac.uk/fac/sci/moac/people/students/peter_cock/r/geo). COMMENT: Embodied script to run R source by command line (without having to get in the R environment) by passing through arguments.
 
 
 ### PART 2 ###
 
 Find the COX pathway genes through the datasets (GSE as source files).
 
-- Parse GSM tables with ruby script to find and count the existence of COX pathway genes. 
-- Export these genes with their expression values for all samples.
-- Barplot in R, the average, variance, and standard deviation in gene expression level for COX pathway genes, per experiment and by gene (pending).
+- Found genes (find_genes.rb): Parse GSM tables with ruby script to find and count the existence of COX pathway genes. Export these genes with their expression values for all samples.
+
+- Gene expression plots (barplot.R): Barplot the average, variance, and standard deviation in gene expression level for COX pathway genes, per experiment and by gene (pending).
 
 
 ### PART 3 ###
 
 Retrieve the respective CEL files for GEO datasets from GEO to process and RMA normalize the Affy CEL files.
 
-- Run Princeton's script for all experiments and get the PCL files in format: Entrezid_at, expression values for all samples.
-(https://bitbucket.org/FunctionLab/arrayprocess/src/7ac17f671ac91381527ad97de377a7c0c4be6a9a/ProcessToPCL.R?at=default)
-- Use the hgfocus chip lib from brain: http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/16.0.0/entrezg.asp
+- CEL to PCL files (_ProcessToPCL.R): Run Princeton's script for all experiments and get the PCL files in format: Entrezid_at, expression values for all samples (https://bitbucket.org/FunctionLab/arrayprocess/src/7ac17f671ac91381527ad97de377a7c0c4be6a9a/ProcessToPCL.R?at=default). 
+NOTE: Used the hgfocus chip lib from brain: http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/16.0.0/entrezg.asp
 
 
 ### PART 4 ###
 
 Find the COX pathway genes through the datasets, in PCLs (same datasets but using CEL files as source, as mentioned in step 3).
+NOTE: The probe-ids-like in the PCLs are the entrez ids with the probe_id suffix "at".
 
-- The probe-ids-like in the PCLs are the entrez ids with the probe_id suffix "at".
-- R script to locate the COX genes among the csv datasets (PCL files converted to csv first).
-- Barplot in R, the average, variance, and standard deviation in gene expression level for COX pathway genes, per experiment and by gene (pending). Note that the x axis in the plots are the genes (entrez ids).
+- Found genes in PCLs (find_coxgenes_in_pcl.R): Locate the COX genes among the csv datasets (PCL files converted to csv first).
+
+- Gene expression plots (pcl_plots.R, pcl_plots_by_gene.R): Barplot the average, variance, and standard deviation in gene expression level for COX pathway genes, per experiment and by gene (pending). Note that the x axis in the plots are the genes (entrez ids).
 
 
 ### PART 5 ###
 
 Check if the GSM ids (samples) are the same through the experiments (used the GSM tables created in step 2)
 
-- R script to get the uniques through the experiments, export a table with all the relations (https://upenn.box.com/s/zormz8yo5tgbkftru4aj)
+- GSM ids comparison (compareIDs.R): Get the uniques through the experiments, export a table with all the relations (https://upenn.box.com/s/zormz8yo5tgbkftru4aj)
 
 
 ### PART 6 ###
 
-Retrieve genetic data from hapmap by correil id. 
+Retrieve genotype data from hapmap by coriell id (linked to GEO ids) and convert them to ped/map (plink format). 
 
 - Samples: ftp://ftp.ncbi.nlm.nih.gov/hapmap/samples_individuals/ (info about the founders)
 - Genotypes: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/2010-08_phaseII+III/forward/
-IMPORTANT NOTE: the genotype files contain duplicated rs ids with different locations from different origins/ centers (sanger, perlegen, broad, affymetrix, bcm, illumina). There has been a filtering to keep unique rs ids, by merging alleles per sample. Between the duplicated rs entries, compare the alleles like this: known-unknown => known, known==known => known and known!=known => unknown, and ignore the location, origin and other fields, keep the one with the most retrieved alleles.
 
-- Linking GEO expression data with genotypes from HapMap. Ruby script to link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids).
-- Filter all hapmap genotype files to get only the unique rs ids.
-- Convert all hapmap files for each sample set (CEU, JPT, YRI, CHB) to ped files (plink format: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/hapmap3_r3/plink_format/) with GluGenetics (python tool: http://code.google.com/p/glu-genetics/) and filter them with samples' list (to get the respective genotypes for the 'linked' coriell ids). 
+- Genotype files with unique rs-id entries in hapmap format (unique_rs_ids.rb):
+Filtered all hapmap genotype files to get only the unique rs ids.
+IMPORTANT NOTE: the genotype files contain duplicated rs ids with different locations from different origins/ centers (sanger, perlegen, broad, affymetrix, bcm, illumina). Kept the unique rs ids, by merging alleles per sample. Between the duplicated rs entries, compare the alleles like this: 
+known-unknown => known
+known==known => known
+known!=known => unknown
+and ignore the location, origin and other fields.
+
+- GM2NA lists (GM_to_NA.rb): Linking GEO expression data with genotypes from HapMap. Actually link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids).
+
+- Samples' list (coriell_founders_list.rb): Filtering the coriell ids list by the samples that are the founders. Get the sample-individuals with the coriell ids that correspond to the GEO ids, and also fulfill the criterion of being a founder (0 for a founder).
+
+- PED & MAP files (run_glu.sh): Convert all hapmap genotype files (with merged duplicates) for each sample set (CEU, JPT, YRI, CHB) to ped & map files (plink format) with GluGenetics library and filter them with samples' list (list with those coriell ids that correspond to the GEO ids). RUN shell script to transform by sample group.
+REF:
+- PLINK: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/hapmap3_r3/plink_format/
+- GLU: http://code.google.com/p/glu-genetics/
 NOTE: May need to cross validate with the inconsistencies.
 
-- filter the genetic data with 1) 5% variance, 2) only parents.
-- specify in genome 100KB +- from  transcription start site (not sure what this is yet).
+- filter the genetic data with 5% variance
+- specify in genome 100KB +- from  transcription start site (???).
 
 
 ### PART 7 ###

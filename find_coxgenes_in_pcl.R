@@ -4,6 +4,7 @@
 # R --vanilla --args --coxf data/COX_pathway_genes.csv --pclf results/PCLs/GSE5859.csv --identifier GSE5859 --ofile results/found_genes_in_PCLs/GSE5859_found_in_PCL.csv < find_coxgenes_in_pcl.R
 # R --vanilla --args --coxf data/COX_pathway_genes.csv --pclf results/PCLs/GSE10824.csv --identifier GSE10824 --ofile results/found_genes_in_PCLs/GSE10824_found_in_PCL.csv < find_coxgenes_in_pcl.R
 
+# Locate the COX genes among the csv datasets (PCL files converted to csv first)
 
 library("AnnotationDbi")
 library("GO.db")

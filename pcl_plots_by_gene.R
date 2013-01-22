@@ -3,6 +3,9 @@
 # R --vanilla --args --cox_genes data/COX_pathway_genes.csv < pcl_plots_by_gene.R
 # R --vanilla --args --cox_genes data/COX_pathway_genes.csv < pcl_plots_by_gene.R
 # R --vanilla --args --cox_genes data/COX_pathway_genes.csv < pcl_plots_by_gene.R
+
+# Barplot the average, variance, and standard deviation in gene expression level for COX pathway genes, by gene. Note that the x axis in the plots are the genes (entrez ids).
+
 dir = "results/found_genes_in_PCLs/"
 csv_input_files = list.files(dir, pattern = ".csv")
 list_length = length(csv_input_files)
