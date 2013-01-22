@@ -55,10 +55,15 @@ Check if the GSM ids (samples) are the same through the experiments (used the GS
 
 Retrieve genetic data from hapmap by correil id. 
 
-- Linking GEO expression data with genotypes from HapMap. Ruby script to link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids).
-- Samples: ftp://ftp.ncbi.nlm.nih.gov/hapmap/samples_individuals/
+- Samples: ftp://ftp.ncbi.nlm.nih.gov/hapmap/samples_individuals/ (info about the founders)
 - Genotypes: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/2010-08_phaseII+III/forward/
-- Retrieve the respective genotypes for these coriell ids from hapmap. Use plink format (http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/hapmap3_r3/plink_format/) to search within. In case of using hapmap format, parse all chromosomes in the consensus for each sample set (CEU, JPT, YRI, CHB) and also cross validate with the inconsistencies.
+IMPORTANT NOTE: the genotype files contain duplicated rs ids with different locations from different origins/ centers (sanger, perlegen, broad, affymetrix, bcm, illumina). There has been a filtering to keep unique rs ids, by merging alleles per sample. Between the duplicated rs entries, compare the alleles like this: known-unknown => known, known==known => known and known!=known => unknown, and ignore the location, origin and other fields, keep the one with the most retrieved alleles.
+
+- Linking GEO expression data with genotypes from HapMap. Ruby script to link the GM ids (GEO sample ids) with the coriell ids (Hapmap sample ids).
+- Filter all hapmap genotype files to get only the unique rs ids.
+- Convert all hapmap files for each sample set (CEU, JPT, YRI, CHB) to ped files (plink format: http://hapmap.ncbi.nlm.nih.gov/downloads/genotypes/hapmap3_r3/plink_format/) with GluGenetics (python tool: http://code.google.com/p/glu-genetics/) and filter them with samples' list (to get the respective genotypes for the 'linked' coriell ids). 
+NOTE: May need to cross validate with the inconsistencies.
+
 - filter the genetic data with 1) 5% variance, 2) only parents.
 - specify in genome 100KB +- from  transcription start site (not sure what this is yet).
 

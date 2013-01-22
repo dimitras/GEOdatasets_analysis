@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
-# create GM (GEO samples ids) to NA (coriell ids) lists for all experiments
 # USAGE: for i in results/*.csv;do (echo $i;./GM_to_NA.rb $i);done
+# create GM (GEO samples ids) to NA (coriell ids) lists for all experiments
 
 require 'rubygems'
 require 'fastercsv'
