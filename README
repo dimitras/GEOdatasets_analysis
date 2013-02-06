@@ -83,10 +83,19 @@ NOTE: May need to cross validate with the inconsistencies.
 
 Association analysis to identify genetic variants that influence COX pathway gene expression.
 
-....
+- Data QC with plink (plink1.sh): Whole genome association analysis plink toolset. 
+Added sex info into files.
+Get allele frequencies.
+Merge hapmap samples CEU, YRI, JPT, CHB (failed due to strand error).
+Cross merge hapmap samples YRI, JPT, CHB with CEU (failed, but we got missing snps).
+Flip dna strand for missing snps.
+Re-cross merge hapmap samples (finished successfully).
+Merge all hapmap samples: CEU with the flipped-stand versions of YRI, JPT, CHB (failed due to strand error).
 
+IMPORTANT NOTE: QC paused as it seems that a great deal of QC work has not been uploaded to the Hapmap resource.
+
+todo:
 - Analysis with Genetic Power Calculator.
-- Whole genome association analysis plink toolset.
 
 
 ### PART 8 ###
