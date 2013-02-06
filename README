@@ -83,8 +83,30 @@ NOTE: May need to cross validate with the inconsistencies.
 
 Association analysis to identify genetic variants that influence COX pathway gene expression.
 
+....
+
 - Analysis with Genetic Power Calculator.
 - Whole genome association analysis plink toolset.
+
+
+### PART 8 ###
+
+Analysis with ready eQTL results.
+
+Downloaded the results sets for our genes of interest, from eqtl browser: http://eqtl.uchicago.edu/cgi-bin/gbrowse/eqtl/
+The results sets include the Stranger et al. 2007 paper whose data we have retrieved from GEO.
+
+MANUALLY:
+- Searched each of the 21 cox genes (only 20 genes found actually), directly on the eqtl browser, like this: *PTGS1*
+- Downloaded the gff file by selecting the tracks of interest (specifically the studies we are interested, which were selected according to the tissues of our interest), and excluding entrez genes.
+
+AUTOMATED WAY (selected_eqtl_results_to_gff.rb):
+- Downloaded one full gff file that is available at eqtl browser and contains all the data in this browser.
+- Filtered the results
+1. by our genes of interest
+2. by the studies we are interested, which were selected according to the tissues of our interest
+3. by score with cutoff set to 7.0
+
 
 
 
