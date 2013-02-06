@@ -39,13 +39,14 @@ end
 
 # parse eqtl full results sets file and get the selected genes' entries into a hash
 selected_eqtl_result_sets_hash = Hash.new { |h,k| h[k] = [] }
-# eqtl_full_result_sets_parser = File.open(eqtl_full_result_sets_file).read
+gff_genes = {}
 File.open(eqtl_full_result_sets_file).each_line do |line|
 	if line.include?("Alias") 
 		genename = line.split("Alias ")[1].split(" ;")[0].to_s
 	elsif line.include?("eQTL for")
 		genename = line.split("eQTL for ")[1].split("\";")[0].to_s
 	end
+	gff_genes[genename] = nil
 	study = line.split(" ")[1].to_s
 	if study =~ /^(\D+)((\d+_\w+)|(_\w+))$/
 		study = $1
@@ -58,10 +59,22 @@ File.open(eqtl_full_result_sets_file).each_line do |line|
 			if score >= score_cutoff
 				selected_eqtl_result_sets_hash[genename] << line
 			end
-		end
+		end	
 	end
 end
 # puts "RESULTS:: \n #{selected_eqtl_result_sets_hash.keys}"
+puts gff_genes.keys
+puts gff_genes.keys.length
+
+# the missing genes
+missed_genes = {}
+cox_genes.each_key do |gene|
+	if !selected_eqtl_result_sets_hash.has_key?(gene)
+		missed_genes[gene] = nil
+	end
+end
+		
+# puts "MISSED GENES:: \n #{missed_genes.keys.join("\n")}"
 
 # initialize output arg
 selected_eqtl_result_sets_table = Axlsx::Package.new
