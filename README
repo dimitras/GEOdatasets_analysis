@@ -75,6 +75,7 @@ REF:
 - GLU: http://code.google.com/p/glu-genetics/
 NOTE: May need to cross validate with the inconsistencies.
 
+todo:
 - filter the genetic data with 5% variance
 - specify in genome 100KB +- from  transcription start site (???).
 
@@ -121,7 +122,7 @@ Search them in the gff file by location
 - download genes from ncbi with efetch (put all the gene ids seperated with commas in the id argument: get_gene_ids_by_commas.rb)
 http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=gene&id=1544,8529&retmode=text
 - create a csv with geneid, genename, start and stop genomic locations (gene_locis.rb)
-- add genomic location filter to search the genes in the gff file (update selected_eqtl_results_to_gff.rb)
+- add genomic location filter to search the genes in the gff file (to be updated: selected_eqtl_results_to_gff.rb)
 
 MORE:
 also searched results from Dixon et al 2007 http://www.sph.umich.edu/csg/liang/publications/pdf/ng2109.pdf
