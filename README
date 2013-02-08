@@ -116,6 +116,13 @@ AUTOMATED WAY (selected_eqtl_results_to_gff.rb):
 2. by the studies we are interested, which were selected according to the tissues of our interest
 3. by score with cutoff set to 7.0
 
+FOR THE MISSED GENES:
+Search them in the gff file by location
+- download genes from ncbi with efetch (put all the gene ids seperated with commas in the id argument: get_gene_ids_by_commas.rb)
+http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=gene&id=1544,8529&retmode=text
+- create a csv with geneid, genename, start and stop genomic locations (gene_locis.rb)
+- add genomic location filter to search the genes in the gff file (update selected_eqtl_results_to_gff.rb)
+
 MORE:
 also searched results from Dixon et al 2007 http://www.sph.umich.edu/csg/liang/publications/pdf/ng2109.pdf
 and did not find any relevant hits (no gene matches)
