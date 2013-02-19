@@ -77,14 +77,14 @@ NOTE: May need to cross validate with the inconsistencies.
 
 todo:
 - filter the genetic data with 5% variance
-- specify in genome 100KB +- from  transcription start site (???).
+- specify in genome 100KB +- from  transcription start site
 
 
 ### PART 7 ###
 
 Association analysis to identify genetic variants that influence COX pathway gene expression.
 
-- Data QC with plink (plink1.sh): Whole genome association analysis plink toolset. 
+- Data QC (plink1.sh): Whole genome association analysis with plink toolset. 
 Added sex info into files.
 Get allele frequencies.
 Merge hapmap samples CEU, YRI, JPT, CHB (failed due to strand error).
@@ -118,17 +118,35 @@ AUTOMATED WAY (selected_eqtl_results_to_gff.rb):
 3. by score with cutoff set to 7.0
 
 FOR THE MISSED GENES:
-Search them in the gff file by location
+Search them in the gff file by loci
 - download genes from ncbi with efetch (put all the gene ids seperated with commas in the id argument: get_gene_ids_by_commas.rb)
 http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=gene&id=1544,8529&retmode=text
 - create a csv with geneid, genename, start and stop genomic locations (gene_locis.rb)
-- add genomic location filter to search the genes in the gff file (to be updated: selected_eqtl_results_to_gff.rb)
+- add genomic location filter (within 10kbp from start and stop gene position) to search the genes in the gff file (selected_eqtl_results_for_missed_genes.rb)
 
 MORE:
 also searched results from Dixon et al 2007 http://www.sph.umich.edu/csg/liang/publications/pdf/ng2109.pdf
 and did not find any relevant hits (no gene matches)
 
 
+
+### PART 9 ###
+
+Results visualization with region graphs.
+
+Get recombination rates, allele frequencies and linkage disequilibrium data from hapmap for CEU group.
+- To bulk download multiple links from a webpage: 
+#get the index page to grab the links 
+wget http://hapmap.ncbi.nlm.nih.gov/downloads/ld_data/2009-04_rel27/
+# bulk download all the files with perl one-liner
+perl -ne '/href="(.*?)"/ and print "wget http://hapmap.ncbi.nlm.nih.gov/downloads/ld_data/2009-04_rel27/$1\n"' index.html | sh
+# bulk download the CEU files with perl one-liner
+perl -ne '/href="(.*?YRI.txt.gz)"/ and print "wget http://hapmap.ncbi.nlm.nih.gov/downloads/ld_data/2009-04_rel27/$1\n"' index.html | sh
+
+Links:
+ld data: hapmap.ncbi.nlm.nih.gov/downloads/ld_data/2009-04_rel27/
+frequencies: http://hapmap.ncbi.nlm.nih.gov/downloads/frequencies/2010-08_phaseII+III/
+recombination: http://hapmap.ncbi.nlm.nih.gov/downloads/recombination/2011-01_phaseII_B37/
 
 
 

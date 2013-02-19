@@ -1,10 +1,9 @@
 #!/usr/bin/ruby
-# USAGE: ruby selected_eqtl_results_to_gff.rb data/eqtl_browser/sample_groups_for_studies.csv  data/COX_pathway_genesids.csv data/eqtl_browser/All.individual.tracks.gff.v3 7.0 results/eqtl_results_sets/selected_eqtl_result_sets_by_geneid_for_cox_genes.xlsx
-# FOR EXTENDED GENES LIST: 
-# ruby selected_eqtl_results_to_gff.rb data/eqtl_browser/sample_groups_for_studies.csv  data/extended_uniques_cox_pathway_geneids.csv data/eqtl_browser/All.individual.tracks.gff.v3 7.0 results/eqtl_results_sets/selected_eqtl_result_sets_by_geneid_for_extended_list.xlsx
-# ruby selected_eqtl_results_to_gff.rb data/eqtl_browser/sample_groups_for_studies.csv  data/extended_uniques_cox_pathway_geneids.csv data/eqtl_browser/All.individual.tracks.gff.v3 0.0 results/eqtl_results_sets/selected_eqtl_result_sets_by_geneid_for_extended_list_nocutoff.xlsx
+# USAGE: ruby selected_eqtl_results_for_missed_genes.rb data/eqtl_browser/sample_groups_for_studies.csv  data/eqtl_browser/missed_genes_locis_table.csv data/eqtl_browser/All.individual.tracks.gff.v3 7.0 results/eqtl_results_sets/selected_eqtl_result_sets_by_locis_for_extended_list.xlsx
+# No cutoff:
+# ruby selected_eqtl_results_for_missed_genes.rb data/eqtl_browser/sample_groups_for_studies.csv  data/eqtl_browser/missed_genes_locis_table.csv data/eqtl_browser/All.individual.tracks.gff.v3 0.0 results/eqtl_results_sets/selected_eqtl_result_sets_by_locis_for_extended_list_nocutoff.xlsx
 
-# Parse the results sets from eqtl browser, get the results for our genes of interest by keeping only the studies included in the sample groups list, and the ones with score cutoff above 7. The sample groups list was filtered by keeping only the Tcells, LCLs and monocytes tissues. Add population and tissue in the output table.
+# Parse the results sets from eqtl browser for MISSED genes, get the results for our genes of interest by checking genomic location (chrom and positions), keeping only the studies included in the sample groups list, and the ones with score cutoff above 7. The sample groups list was filtered by keeping only the Tcells, LCLs and monocytes tissues. Add population and tissue in the output table. The genes locis were found with ncbi efetch and were formatted with gene_locis.rb.
 
 require 'rubygems'
 require 'fastercsv'
@@ -12,7 +11,7 @@ require 'axlsx'
 
 # input files
 sample_groups_file = ARGV[0]
-cox_genes_file = ARGV[1]
+missed_genes_file = ARGV[1]
 eqtl_full_result_sets_file = ARGV[2]
 score_cutoff = ARGV[3].to_f # recommended 7.0
 
@@ -31,49 +30,49 @@ FasterCSV.foreach(sample_groups_file) do |row|
 end
 # puts "POPULATIONS:: \n #{studies_populations.inspect}"
 
-# parse cox pathway genes file into a hash
-cox_genes = {}
-FasterCSV.foreach(cox_genes_file) do |gene|
-	cox_genes[gene.to_s] = nil
+
+# parse missed genes file into a hash by chrom as a key
+missed_genes_per_chrom = Hash.new { |h,k| h[k] = [] }
+FasterCSV.foreach(missed_genes_file) do |line|
+	missed_genes_per_chrom["chr#{line[2]}"] << line
 end
-# puts "GENES:: \n #{cox_genes.inspect}"
+# puts "MISSED GENES:: \n #{missed_genes_per_chrom.inspect}"
+
 
 # parse eqtl full results sets file and get the selected genes' entries into a hash
 selected_eqtl_result_sets_hash = Hash.new { |h,k| h[k] = [] }
-gff_genes = {} # to count unique genes in gff
 File.open(eqtl_full_result_sets_file).each_line do |line|
-	if line.include?("Alias") 
-		genename = line.split("Alias ")[1].split(" ;")[0].to_s
-	elsif line.include?("eQTL for")
-		genename = line.split("eQTL for ")[1].split("\";")[0].to_s
-	end
-	gff_genes[genename] = nil
-	study = line.split(" ")[1].to_s
-	if study =~ /^(\D+)((\d+_\w+)|(_\w+))$/
-		study = $1
-	else
-		study
-	end
-	score = line.split("\t")[5].to_f
-	if cox_genes.has_key?(genename)
-		if studies_populations.has_key?(study)
-			if score >= score_cutoff
-				selected_eqtl_result_sets_hash[genename] << line
+	chrom = line.split("\t")[0]
+	if missed_genes_per_chrom.include?(chrom)
+		missed_genes_per_chrom[chrom].each do |gene|
+			start_pos = gene[3].to_i
+			stop_pos = gene[4].to_i
+			snp_pos = line.split("\t")[3].to_i
+			if (start_pos-10000 <= snp_pos) && (snp_pos <= stop_pos+10000) # within 10Kbp in the coding region
+				study = line.split("\t")[1].to_s
+				if study =~ /^(\D+)((\d+_\w+)|(_\w+))$/
+					study = $1
+				else
+					study
+				end
+				if studies_populations.has_key?(study)
+					score = line.split("\t")[5].to_f
+					if line.include?("Alias") 
+						genename = line.split("Alias ")[1].split(" ;")[0].to_s
+					elsif line.include?("eQTL for")
+						genename = line.split("eQTL for ")[1].split("\";")[0].to_s
+					end
+
+					if score >= score_cutoff
+						selected_eqtl_result_sets_hash[genename] << line
+					end
+				end
 			end
-		end	
+		end
 	end
 end
-# puts "RESULTS:: \n #{selected_eqtl_result_sets_hash.keys}"
-# puts gff_genes.keys.length
+# puts "RESULTS:: \n #{selected_eqtl_result_sets_hash.keys.join(", ")}"
 
-# to get the missing genes
-missed_genes = {}
-cox_genes.each_key do |gene|
-	if !selected_eqtl_result_sets_hash.has_key?(gene)
-		missed_genes[gene] = nil
-	end
-end		
-# puts "MISSED GENES:: \n #{missed_genes.keys.join("\n")}"
 
 # initialize output arg
 selected_eqtl_result_sets_table = Axlsx::Package.new
