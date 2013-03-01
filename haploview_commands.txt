@@ -1,0 +1,27 @@
+# Create the LD plots with haploview
+
+##### SVGs ######
+
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS1/ -n -hapmapDownload -chromosome 9 -startpos 124175 -endpos 124205 -panel YRI -svg -infoTrack -blockoutput ALL -release R2
+
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS2/ -n -hapmapDownload -chromosome 1 -startpos 184665 -endpos 184900 -panel CEU -svg -infoTrack -blockoutput ALL -release R2
+
+##### PNGs ######
+
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS1/ -n -hapmapDownload -chromosome 9 -startpos 124175 -endpos 124205 -panel YRI -png -infoTrack -blockoutput ALL -release R2
+
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS2/ -n -hapmapDownload -chromosome 1 -startpos 184665 -endpos 184900 -panel CEU -png -infoTrack -blockoutput ALL -release R2
+
+
+##### ONLY OUR SNPs ######
+
+##### SVGs ######
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS1/ -n -hapmapDownload -chromosome 9 -startpos 124175 -endpos 124205 -panel YRI -svg -infoTrack -blockoutput ALL -release R2 -excludeMarkers 1..10,12..57,59,62..63,65,67..72,74..76
+
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS2/ -n -hapmapDownload -chromosome 1 -startpos 184665 -endpos 184900 -panel CEU -svg -infoTrack -blockoutput ALL -release R2 -excludeMarkers 1..2,4..44,46..53,55..58,60..62,64,66,68..73
+
+
+##### PNGs ######
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS1/ -n -hapmapDownload -chromosome 9 -startpos 124175 -endpos 124205 -panel YRI -png -infoTrack -blockoutput ALL -release R2 -excludeMarkers 1..10,12..57,59,62..63,65,67..72,74..76
+
+java -jar Haploview.jar -nogui -out ~/Documents/dimitra/2git/GEOdatasets_analysis/results/eqtl_results_sets/ld_plots/haploview/PTGS2/ -n -hapmapDownload -chromosome 1 -startpos 184665 -endpos 184900 -panel CEU -png -infoTrack -blockoutput ALL -release R2 -excludeMarkers 1..2,4..44,46..53,55..58,60..62,64,66,68..73

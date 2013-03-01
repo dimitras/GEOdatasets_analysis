@@ -3,6 +3,8 @@
 # FOR EXTENDED GENES LIST: 
 # ruby selected_eqtl_results_to_gff.rb data/eqtl_browser/sample_groups_for_studies.csv  data/extended_uniques_cox_pathway_geneids.csv data/eqtl_browser/All.individual.tracks.gff.v3 7.0 results/eqtl_results_sets/selected_eqtl_result_sets_by_geneid_for_extended_list.xlsx
 # ruby selected_eqtl_results_to_gff.rb data/eqtl_browser/sample_groups_for_studies.csv  data/extended_uniques_cox_pathway_geneids.csv data/eqtl_browser/All.individual.tracks.gff.v3 0.0 results/eqtl_results_sets/selected_eqtl_result_sets_by_geneid_for_extended_list_nocutoff.xlsx
+# Run for mixed genes list
+# ruby selected_eqtl_results_to_gff.rb data/eqtl_browser/sample_groups_for_studies.csv  results/eqtl_results_sets/CV_plots/mix_cox_and_housekeeping_genes.csv data/eqtl_browser/All.individual.tracks.gff.v3 7.0 results/eqtl_results_sets/CV_plots/selected_eqtl_result_sets_by_geneid_for_mixed_genes.xlsx
 
 # Parse the results sets from eqtl browser, get the results for our genes of interest by keeping only the studies included in the sample groups list, and the ones with score cutoff above 7. The sample groups list was filtered by keeping only the Tcells, LCLs and monocytes tissues. Add population and tissue in the output table.
 

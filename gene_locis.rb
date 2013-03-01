@@ -16,18 +16,24 @@ geneid = nil
 chrom = nil
 start_position = nil
 stop_position = nil
+strand = nil
 File.open(missed_genes_locis_file).each_line do |line|
 	if line =~ /^\d+\.\s(\w+)/
 		genename = $1
 	elsif line =~ /^Chromosome: (\d+)/
 		chrom = $1
-	elsif line =~ /\((\d+)\.\.(\d+)\)/
+	elsif (line =~ /\((\d+)\.\.(\d+)\)/) || (line =~ /\((\d+)\.\.(\d+)(, complement?)\)/)
 		start_position = $1
 		stop_position = $2
+		if $3
+			strand = '-'
+		else
+			strand = '+'
+		end
 	elsif line =~ /^ID: (\d+)/
 		geneid = $1
 	elsif line == "\n"
-		genes_locis[geneid] = [geneid, genename, chrom, start_position, stop_position]
+		genes_locis[geneid] = [geneid, genename, chrom, strand, start_position, stop_position]
 		genes_locis_table.puts genes_locis[geneid].join(",")
 	end
 end

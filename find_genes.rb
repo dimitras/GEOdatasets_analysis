@@ -47,8 +47,3 @@ end
 found_genes_output.close
 
 
-
-
-
-
-

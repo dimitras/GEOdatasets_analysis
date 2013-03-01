@@ -129,13 +129,12 @@ also searched results from Dixon et al 2007 http://www.sph.umich.edu/csg/liang/p
 and did not find any relevant hits (no gene matches)
 
 
-
 ### PART 9 ###
 
 Results visualization with region graphs.
 
 Get recombination rates, allele frequencies and linkage disequilibrium data from hapmap for CEU group.
-- To bulk download multiple links from a webpage: 
+- Bulk download multiple links from a webpage: 
 #get the index page to grab the links 
 wget http://hapmap.ncbi.nlm.nih.gov/downloads/ld_data/2009-04_rel27/
 # bulk download all the files with perl one-liner
@@ -143,10 +142,36 @@ perl -ne '/href="(.*?)"/ and print "wget http://hapmap.ncbi.nlm.nih.gov/download
 # bulk download the CEU files with perl one-liner
 perl -ne '/href="(.*?YRI.txt.gz)"/ and print "wget http://hapmap.ncbi.nlm.nih.gov/downloads/ld_data/2009-04_rel27/$1\n"' index.html | sh
 
-Links:
+Links that got tha data from hapmap:
 ld data: hapmap.ncbi.nlm.nih.gov/downloads/ld_data/2009-04_rel27/
 frequencies: http://hapmap.ncbi.nlm.nih.gov/downloads/frequencies/2010-08_phaseII+III/
 recombination: http://hapmap.ncbi.nlm.nih.gov/downloads/recombination/2011-01_phaseII_B37/
+
+REGION GRAPHS:
+1) fix files with SNPs per gene in ceratin format (manhattan graphs) & files for plotting only the SNPs region (plain graphs) {TODO: needs to be automated}
+2) fix lists for highlighted SNPs in certain format
+formats are explained here: http://people.virginia.edu/~sdt5z/0STABLE/qqman.r
+3) plot with manhattan_plot.R (used manhattan function available on web)
+
+LD PLOTS:
+1) installed & used haploview command line tool
+2) run the commands in haploview_commands.txt
+
+ALLELE FREQUENCIES PLOTS:
+1) used frequencies' data from hapmap and the files for plotting only the SNPs region (see region graphs)
+2) plot with allele_frequencies_plot.R
+
+SD & VAR ABUNDANCE BARPLOTS PER POPULATION:
+1) from geo ids get the correil ids (GM_to_NA.rb)
+2) get the sample-individuals with the coriell ids that correspond to the GEO ids (coriell_founders_list.rb)
+3) create a new mixed genes list, adding a few housekeeping genes
+4) find the 'grouped by hapmap poulation' GM ids from each geogroup (find_genes_in_geo_per_population.rb)
+5) merge the same population's genes that were found in the different geogroups (use paste unix command) 
+6) keep the unique ids from the merged file (merge_genes_per_population.rb)
+7) barplot the variance and standard deviation in gene expression level for COX pathway genes & housekeeping, per population (mixed_genes_expression_per_hapgroup.R)
+
+
+
 
 
 

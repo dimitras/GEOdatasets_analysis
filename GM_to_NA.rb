@@ -7,7 +7,8 @@ require 'fastercsv'
 
 infile = ARGV[0]
 filename = infile.split("/")[1].split(".")[0]
-gm_to_na_ofile = "results/Hapmap/GM2NA_list_#{filename}.csv"
+# gm_to_na_ofile = "results/Hapmap/GM2NA_list_#{filename}.csv"
+gm_to_na_ofile = "results/eqtl_results_sets/CV_plots/NAs_for_mixed_genes_in_#{filename}.csv"
 
 # isolate the ids (ex. 06994) from the GM ids (ex. GM06994_rep1) of all experiments (GSE files)
 ids = Hash.new { |h,k| h[k] = [] }
